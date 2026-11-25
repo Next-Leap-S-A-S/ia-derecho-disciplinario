@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entre el prompt y la sanción | Next Leap</title>
+<meta name="description" content="Taller de prompts sobre ética, diligencia y responsabilidad disciplinaria en el uso de inteligencia artificial.">
+<style>
+{{FONT_CSS}}
+:root{--bg:#fff;--ink:#111114;--ink60:#5f6069;--line:rgba(0,0,0,.09);--surf:rgba(0,0,0,.022);--g:#00522c;--rol:#2563eb;--ctx:#9333ea;--ins:#db2777}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 'Inter',system-ui,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+.top{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600}
+.brand img{width:27px;height:26px}
+.client{font-size:13px;color:var(--ink60);text-align:right;line-height:1.3}
+.client b{display:block;color:var(--ink);font-weight:600}
+.code{font:500 12px 'IBM Plex Mono',monospace;color:var(--ink60);letter-spacing:.02em}
+header.h{padding:48px 0 36px}
+h1{font-size:clamp(30px,6vw,52px);line-height:1.08;letter-spacing:-.02em;margin:10px 0 14px;font-weight:600}
+h1 span{background:linear-gradient(135deg,#00522c,#78b92f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--ink60);max-width:62ch;margin:0;font-size:18px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));padding-bottom:24px}
+.card{border:1px solid var(--line);background:var(--surf);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:6px}
+.card h2{margin:4px 0 0;font-size:24px;letter-spacing:-.01em;font-weight:600}
+.card p{margin:0 0 12px;color:var(--ink60)}
+.l{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 15px;border:1px solid var(--line);border-radius:10px;background:#fff;color:inherit;text-decoration:none;margin-top:8px}
+.l:hover,.l:focus-visible{border-color:var(--g);outline:none}
+.l strong{display:block;font-size:15px;font-weight:600}
+.l small{color:var(--ink60);font-size:13px}
+.l::after{content:"\2192";font-weight:600}
+.l.main{background:var(--g);color:#fff;border-color:var(--g)}
+.l.main small{color:#ffffffb8}
+.soon{margin-top:8px;padding:13px 15px;border:1px dashed var(--line);border-radius:10px;color:var(--ink60);font-size:14px}
+.how{padding:28px 0 8px}
+.how h3{font-size:15px;margin:0 0 6px;font-weight:600}
+.how p{margin:0;color:var(--ink60);max-width:70ch;font-size:15px}
+footer{border-top:1px solid var(--line);margin-top:32px;padding:20px 0 40px;color:var(--ink60);font-size:13px}
+</style>
+</head>
+<body>
+{{INST_BAND}}
+<div class="wrap">
+  <header class="h">
+    <h1>Entre el prompt y <span>la sanción</span></h1>
+    <p class="lead">Ética, diligencia y responsabilidad disciplinaria en el uso de inteligencia artificial. Material de la clase en el VII Congreso de Derecho Disciplinario y Sancionatorio, Tunja 2026.</p>
+  </header>
+  <div class="grid">
+    <section class="card">
+      <span class="code">/módulo 1</span>
+      <h2>Taller de prompts</h2>
+      <p>Cómo pedirle bien las cosas a la IA con el método Rol, Contexto, Instrucción, aplicado al derecho disciplinario: investigar, defender, decidir y usar la IA con responsabilidad.</p>
+      <a class="l main" href="taller-prompts.html"><div><strong>Abrir el taller</strong><small>24 prompts, laboratorio con medidor y ejercicio RCI</small></div></a>
+    </section>
+  </div>
+  <div class="how">
+    <h3>Antes de pegar nada en una herramienta de IA</h3>
+    <p>Reemplaza nombres, cédulas, NIT, radicados y datos de contacto por marcadores genéricos. La respuesta de la IA es un borrador: verifica cada norma y cada providencia en la fuente oficial.</p>
+  </div>
+  <footer style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px"><span>VII Congreso de Derecho Disciplinario · Tunja 2026</span><span class="powered" style="display:inline-flex;align-items:center;gap:8px;font-size:12px;color:#6b6c75"><span>Powered by</span><img src="{{LOGO_PNG}}" alt="" width="22" height="21"><b style="color:#111114;font-weight:600">Next Leap</b></span></footer>
+</div>
+</body>
+</html>
