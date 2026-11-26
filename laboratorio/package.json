@@ -1,0 +1,19 @@
+{
+  "name": "laboratorio-disciplinario",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Laboratorio dinamico de prompts RCI para derecho disciplinario: cada persona arma su perfil y la IA genera su biblioteca.",
+  "scripts": {
+    "dev": "vercel dev",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.1.0",
+    "@neondatabase/serverless": "^1.2.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@vercel/node": "^3.2.0",
+    "typescript": "^5.6.0"
+  }
+}

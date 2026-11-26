@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Entre el prompt y la sanción · Presentación</title>
+<style>
+@font-face{font-family:'Inter';font-style:normal;font-weight:300 600;font-display:swap;src:url(src/assets/inter-400.woff2) format('woff2')}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#141414;--i75:#3d3d42;--i55:#6a6a72;--line:rgba(20,20,20,.1);--g:linear-gradient(90deg,#2563eb,#9333ea,#db2777)}
+html,body{width:100%;height:100%;overflow:hidden;background:#fff;color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+#stage{position:fixed;left:50%;top:50%;width:1600px;height:900px;transform-origin:center;background:#fff;overflow:hidden}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--g);transition:width .35s;z-index:200}
+#counter{position:fixed;bottom:16px;right:22px;font-size:12px;letter-spacing:.12em;color:var(--i55);z-index:200;font-variant-numeric:tabular-nums}
+
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:80px 130px;opacity:0;visibility:hidden;transition:opacity .35s;overflow:hidden;background:#fff}
+.slide.active{opacity:1;visibility:visible}
+.slide.dim{background:#f4f4f2}
+.slide>*:not(.bg):not(.num):not(.pin){position:relative;z-index:1}
+
+.label{font-size:15px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;margin-bottom:28px;background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent;align-self:flex-start}
+h1{font-size:84px;font-weight:500;line-height:1.03;letter-spacing:-.035em;max-width:1200px}
+h2{font-size:58px;font-weight:500;line-height:1.08;letter-spacing:-.028em;max-width:1220px}
+.body{font-size:24px;font-weight:300;line-height:1.62;color:var(--i75);max-width:960px;margin-top:26px}
+.pull{font-size:32px;font-weight:400;line-height:1.42;max-width:1060px;border-left:3px solid;border-image:linear-gradient(180deg,#2563eb,#db2777) 1;padding-left:32px;margin-top:32px}
+.key{font-size:23px;font-weight:500;line-height:1.5;margin-top:40px;padding-top:26px;border-top:1px solid var(--line);max-width:1080px}
+.src{font-size:14px;color:var(--i55);margin-top:22px;max-width:1100px;line-height:1.5}
+
+.cols{display:grid;gap:14px;margin-top:40px}
+.c2{grid-template-columns:repeat(2,1fr)}.c3{grid-template-columns:repeat(3,1fr)}.c4{grid-template-columns:repeat(4,1fr)}.c5{grid-template-columns:repeat(5,1fr)}
+.card{border:1px solid var(--line);border-radius:14px;padding:30px 28px;background:rgba(20,20,20,.025)}
+.tag{font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--i55);margin-bottom:14px}
+.card h3{font-size:25px;font-weight:600;line-height:1.25;letter-spacing:-.012em;margin-bottom:12px}
+.card p,.card li{font-size:19px;font-weight:300;line-height:1.55;color:var(--i75)}
+.card ul{list-style:none}
+.card li{padding:9px 0;border-top:1px solid var(--line)}
+.card li:first-child{border-top:0;padding-top:0}
+.card q{font-style:normal;font-weight:400;color:var(--ink);quotes:"«" "»"}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:56px;margin-top:46px;max-width:1260px}
+.stats.s2{grid-template-columns:repeat(2,1fr);max-width:980px}
+.stat b{display:block;font-size:76px;font-weight:600;letter-spacing:-.045em;line-height:1.05;background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:4px}
+.stat span{display:block;font-size:19px;font-weight:300;color:var(--i75);line-height:1.5;margin-top:10px}
+
+.case{border:1px solid var(--line);border-radius:14px;padding:28px 34px;background:rgba(20,20,20,.03);margin-top:30px;max-width:1340px}
+.case p{font-size:23px;font-weight:300;line-height:1.6}
+.pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px;max-width:1200px}
+.pill{border:1px solid var(--line);border-radius:8px;padding:9px 18px;font-size:19px;font-weight:300;color:var(--i55)}
+.pill.on{border-color:var(--ink);color:var(--ink);font-weight:500}
+
+.bg{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center}
+.bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.95),rgba(255,255,255,.8) 45%,rgba(255,255,255,.3))}
+.bg.half{left:50%}
+.bg.half::after{background:linear-gradient(90deg,#fff,rgba(255,255,255,.55) 20%,rgba(255,255,255,.05) 60%)}
+.dim .bg.half::after{background:linear-gradient(90deg,#f4f4f2,rgba(244,244,242,.55) 20%,rgba(244,244,242,.05) 60%)}
+.slide.side>*:not(.bg){max-width:720px}
+
+.sec{justify-content:flex-end;padding-bottom:120px}
+.num{position:absolute;right:-10px;bottom:-90px;font-size:520px;font-weight:600;line-height:1;color:rgba(20,20,20,.04);z-index:0}
+.sec .tag{font-size:15px}
+.sec h2{font-size:112px;letter-spacing:-.045em;line-height:1;max-width:800px}
+.sec p{font-size:25px;font-weight:300;color:var(--i55);margin-top:24px;max-width:640px;line-height:1.55}
+
+.meta{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:70px;margin-top:44px;padding-top:30px;border-top:1px solid var(--line);max-width:1200px}
+.meta .tag{margin-bottom:8px}
+.meta div div:last-child{font-size:19px;font-weight:300}
+.pin{position:absolute;z-index:2;top:40px;font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--i55)}
+.pin.l{left:130px}.pin.r{right:130px}
+
+.links{display:flex;gap:14px;margin-top:36px;flex-wrap:wrap}
+.links a{display:inline-flex;align-items:center;gap:12px;border:1px solid var(--ink);border-radius:10px;padding:16px 26px;font-size:20px;font-weight:500;color:var(--ink);text-decoration:none}
+.links a.main{background:var(--ink);color:#fff}
+.links a[hidden]{display:none}
+.bg.strong::after{background:linear-gradient(90deg,rgba(255,255,255,.97),rgba(255,255,255,.93) 62%,rgba(255,255,255,.35))}
+.credits{font-size:14.5px;font-weight:300;line-height:1.75;color:var(--i75);columns:2;column-gap:60px;margin-top:30px}
+.credits p{break-inside:avoid;margin-bottom:7px}
+.credits a{color:inherit}
+
+@page{size:1600px 900px;margin:0}
+@media print{
+  html,body{overflow:visible;height:auto}
+  #stage{position:static;transform:none!important;height:auto;overflow:visible}
+  .slide{position:relative;inset:auto;width:1600px;height:900px;opacity:1;visibility:visible;break-after:page;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #progress,#counter{display:none}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="counter"></div>
+<main id="stage">
+
+<!-- 01 -->
+<section class="slide">
+  <div class="bg" style="background-image:url(assets/deck/biblioteca-viena.jpg)"></div>
+  <div class="pin l">Next Leap</div><div class="pin r">Tunja 2026</div>
+  <div class="label">VII Congreso de Derecho Disciplinario y Sancionatorio</div>
+  <h1>Entre el prompt<br>y la sanción.</h1>
+  <p class="body">Ética, diligencia y responsabilidad disciplinaria en el uso de inteligencia artificial.</p>
+  <div class="meta">
+    <div><div class="tag">Tesis</div><div>La herramienta no responde. Responde quien firma.</div></div>
+    <div><div class="tag">Hilo conductor</div><div>El juez Hércules, Dworkin</div></div>
+    <div><div class="tag">Marco</div><div>Dworkin · Hart · Rawls · Barrat</div></div>
+  </div>
+</section>
+
+<!-- 02 -->
+<section class="slide">
+  <div class="label">/01 La tesis</div>
+  <h1>La sanción no la<br>recibe la máquina.</h1>
+  <p class="body">La inteligencia artificial ya redacta un auto, unos descargos o un concepto. La pregunta de este congreso es otra. Qué deber cumplió quien firmó antes de firmar.</p>
+  <p class="key">El texto puede producirlo una herramienta. La diligencia sigue siendo personal.</p>
+</section>
+
+<!-- 03 -->
+<section class="slide">
+  <div class="label">/01 Un caso de este año</div>
+  <h2>Cinco de seis citas.</h2>
+  <p class="body">Una comisión seccional terminó una actuación disciplinaria contra un juez. Para motivar la decisión transcribió apartes de seis providencias.</p>
+  <div class="stats">
+    <div class="stat"><b>5 de 6</b><span>citas jurisprudenciales remitían a providencias que no se encontraron o que no contienen el texto transcrito.</span></div>
+    <div class="stat"><b>Nulidad</b><span>de la actuación desde el auto que ordenó la terminación, por irregularidad sustancial que afectó el debido proceso.</span></div>
+    <div class="stat"><b>Copias</b><span>para investigar al magistrado ponente de primera instancia, incluido un presunto uso inadecuado de herramientas de IA.</span></div>
+  </div>
+  <p class="key">Si hubo inteligencia artificial está por investigarse. Que las citas no resistían la consulta en la relatoría ya quedó establecido.</p>
+  <p class="src">Comisión Nacional de Disciplina Judicial, providencia del 26 de marzo de 2026, rad. 150011102000202000358 02.</p>
+</section>
+
+<!-- 04 -->
+<section class="slide side">
+  <div class="bg half" style="background-image:url(assets/deck/raton-2.jpg);background-position:60% center"></div>
+  <div class="label">/01 James Barrat, Our Final Invention</div>
+  <h2>Despertar en una prisión custodiada por ratones.</h2>
+  <p class="body">Imagine que despierta encerrado. Sus carceleros son ratones con los que puede conversar, y fueron ellos quienes lo crearon. Los convence, les ofrece lo que desean y espera a que se distraigan.</p>
+  <p class="pull">Los ratones creían tener el control porque habían construido la jaula.</p>
+  <p class="key">Quien cree controlar la herramienta porque escribió el prompt razona como el ratón.</p>
+</section>
+
+<!-- 05 -->
+<section class="slide dim sec">
+  <div class="bg half" style="background-image:url(assets/deck/hercules-napoli.jpg);background-position:center 18%"></div>
+  <div class="num">H</div>
+  <div class="tag">El ideal</div>
+  <h2>El juez<br>Hércules.</h2>
+  <p>Quién es, qué puede hacer y por qué ningún operador disciplinario tiene sus condiciones.</p>
+</section>
+
+<!-- 06 -->
+<section class="slide side">
+  <div class="bg half" style="background-image:url(assets/deck/dworkin.jpg);background-position:center 25%"></div>
+  <div class="label">/02 Hércules · Dworkin</div>
+  <h2>Ronald Dworkin construyó una figura.</h2>
+  <p class="body">La llamó el juez Hércules. No existe. Es un ideal metodológico que describe lo que debería poder hacer quien aplica el derecho en condiciones perfectas.</p>
+  <p class="pull">Tiene todo el tiempo que necesita. Conoce el derecho de su comunidad y elige la interpretación que mejor lo explica y lo justifica.</p>
+  <p class="key">Hércules pondera, vuelve atrás, reformula y contrasta. Ningún término corre en su contra.</p>
+</section>
+
+<!-- 07 -->
+<section class="slide">
+  <div class="label">/02 Hércules · Las condiciones</div>
+  <h2>Lo que Hércules tiene.</h2>
+  <div class="cols c5">
+    <div class="card"><div class="tag">01</div><h3>Tiempo ilimitado</h3><p>Sin término de prescripción ni reparto pendiente.</p></div>
+    <div class="card"><div class="tag">02</div><h3>Jurisprudencia completa</h3><p>Conoce cada precedente relevante y lo que dice de verdad.</p></div>
+    <div class="card"><div class="tag">03</div><h3>Principios articulados</h3><p>Comprende las razones que sostienen el ordenamiento.</p></div>
+    <div class="card"><div class="tag">04</div><h3>Todas las lecturas</h3><p>Explora cada interpretación antes de elegir la más coherente.</p></div>
+    <div class="card"><div class="tag">05</div><h3>Memoria sin error</h3><p>No olvida, no confunde y no omite por cansancio.</p></div>
+  </div>
+  <p class="key">Hércules nunca necesitó citar de memoria algo que no había leído.</p>
+</section>
+
+<!-- 08 -->
+<section class="slide">
+  <div class="label">/02 Hércules · La realidad</div>
+  <h1>Ningún operador<br>disciplinario es Hércules.</h1>
+  <div class="cols c2" style="max-width:1340px">
+    <div class="card"><div class="tag">Hércules</div><h3>El ideal</h3><p>Tiempo ilimitado. Información completa. Sin carga laboral. Puede ponderar cuanto quiera antes de decidir.</p></div>
+    <div class="card"><div class="tag">El operador real</div><h3>Las condiciones del despacho</h3><p>Términos que corren hacia la prescripción. Expedientes de cientos de folios. Prueba incompleta. Cansancio. Una decisión que compromete el cargo y el nombre de una persona.</p></div>
+  </div>
+  <p class="key">La función disciplinaria se ejerce en la distancia entre esas dos columnas. Por esa distancia está entrando la inteligencia artificial.</p>
+</section>
+
+<!-- 09 -->
+<section class="slide">
+  <div class="label">/02 Hércules · Reglas y principios</div>
+  <h2>La falta disciplinaria no se resuelve<br>encontrando la norma.</h2>
+  <div class="cols c3">
+    <div class="card"><div class="tag">Hart</div><h3>Las reglas</h3><p>El tipo, el procedimiento, la competencia, el término. Se identifican por su origen formal.</p></div>
+    <div class="card"><div class="tag">Principio · Art. 9, Ley 1952</div><h3>Ilicitud sustancial</h3><p><q>La conducta del disciplinable será ilícita cuando afecte sustancialmente el deber funcional sin justificación alguna.</q></p></div>
+    <div class="card"><div class="tag">Principio · Art. 10, Ley 1952</div><h3>Culpabilidad</h3><p><q>Queda proscrita toda forma de responsabilidad objetiva.</q></p></div>
+  </div>
+  <p class="key">Para Dworkin los casos difíciles se resuelven con principios. Decir si un deber se afectó sustancialmente exige construir un argumento, y un buscador no lo construye.</p>
+</section>
+
+<!-- 10 -->
+<section class="slide side">
+  <div class="bg half" style="background-image:url(assets/deck/justicia.jpg)"></div>
+  <div class="label">/02 Hércules · Rawls</div>
+  <h2>Lo que va antes de abrir el expediente.</h2>
+  <p class="body">Rawls habló del sentido de la justicia, la capacidad de reconocer que algo está mal antes de poder explicarlo. Su método, el equilibrio reflexivo, va y vuelve entre principios y casos hasta que ambos se sostienen.</p>
+  <p class="pull">En disciplinario ese ir y volver empieza por la presunción de inocencia.</p>
+  <p class="key">Un modelo de lenguaje no responde por las consecuencias de la posición que sostiene. Usted sí.</p>
+</section>
+
+<!-- 11 -->
+<section class="slide dim sec">
+  <div class="bg half" style="background-image:url(assets/deck/escribir.jpg)"></div>
+  <div class="num">IA</div>
+  <div class="tag">La herramienta</div>
+  <h2>Entra la inteligencia artificial.</h2>
+  <p>No reemplaza a Hércules. Pone a prueba al operador que dejó de intentarlo.</p>
+</section>
+
+<!-- 12 -->
+<section class="slide">
+  <div class="label">/03 La relación correcta</div>
+  <h2>La IA puede darle al operador<br>lo que a Hércules le sobraba: tiempo.</h2>
+  <div class="cols c2" style="max-width:1340px">
+    <div class="card"><div class="tag">Puede preparar</div><ul><li>Cronología de hechos con folio</li><li>Índice del expediente e inventario de pruebas</li><li>Lista de vacíos antes de decidir</li><li>Primer borrador de la estructura</li></ul></div>
+    <div class="card"><div class="tag">No puede decidir</div><ul><li>Valoración de la prueba</li><li>Calificación de la falta</li><li>Culpabilidad y sanción</li><li>Lo que se firma</li></ul></div>
+  </div>
+  <p class="key">El tiempo liberado vale si se gasta en leer, contrastar y motivar.</p>
+</section>
+
+<!-- 13 -->
+<section class="slide">
+  <div class="label">/03 Lo que la herramienta hace</div>
+  <h2>Verosímil no es verdadero.</h2>
+  <p class="body">Un modelo de lenguaje predice la continuación más probable de un texto. Está hecho para sonar coherente. Una cita inventada le queda con la misma sintaxis que una real.</p>
+  <div class="stats s2">
+    <div class="stat"><b>17 a 33 %</b><span>del tiempo alucinaron las herramientas de investigación jurídica con IA evaluadas por investigadores de Stanford, pese a consultar bases jurídicas.</span></div>
+    <div class="stat"><b>6</b><span>decisiones inexistentes en el escrito del caso Mata v. Avianca, Nueva York, 2023. La herramienta confirmó que existían.</span></div>
+  </div>
+  <p class="src">Magesh, Surani, Dahl, Suzgun, Manning y Ho, «Hallucination-Free? Assessing the Reliability of Leading AI Legal Research Tools». Estudio sobre productos del mercado estadounidense.</p>
+</section>
+
+<!-- 14 -->
+<section class="slide">
+  <div class="label">/04 Colombia ya respondió</div>
+  <h2>De la advertencia a las consecuencias.</h2>
+  <div class="cols c4">
+    <div class="card"><div class="tag">Ago. 2024</div><h3>Corte Constitucional<br>T-323</h3><p>Un juez transcribió respuestas de ChatGPT en una tutela. La Corte no anuló la actuación y fijó criterios para usar la IA.</p></div>
+    <div class="card"><div class="tag">Nov. 2025</div><h3>Corte Suprema<br>STC17832-2025</h3><p>Un tribunal transcribió párrafos inexistentes de la propia Corte. En tutela, la decisión cayó por vía de hecho.</p></div>
+    <div class="card"><div class="tag">Feb. 2026</div><h3>Corte Suprema<br>AC739-2026</h3><p>Un abogado citó decisiones inexistentes en un recurso de revisión. Multa de 15 salarios mínimos y copias disciplinarias.</p></div>
+    <div class="card"><div class="tag">Mar. 2026</div><h3>Comisión Nacional<br>de Disciplina Judicial</h3><p>Citas que no correspondían en una decisión disciplinaria. Nulidad y copias contra su autor.</p></div>
+  </div>
+  <p class="key">Ya hubo consecuencias para jueces, para abogados y para quien ejerce la función disciplinaria.</p>
+</section>
+
+<!-- 15 -->
+<section class="slide">
+  <div class="label">/04 La regla de verificación</div>
+  <p class="pull" style="margin-top:0;font-size:40px;max-width:1220px">«No es admisible que, bajo la excusa de una aparente eficiencia y necesidad de descongestionar el aparato jurisdiccional, se admita la inclusión en las providencias judiciales de textos generados por la IA, sin ningún tipo de control.»</p>
+  <p class="src">Corte Constitucional, sentencia T-323 de 2024, transcrita en STC17832-2025.</p>
+  <div class="pills">
+    <span class="pill on">Transparencia</span><span class="pill on">Responsabilidad</span><span class="pill on">Privacidad</span><span class="pill on">No sustitución de la racionalidad humana</span><span class="pill on">Seriedad y verificación</span><span class="pill on">Control humano</span>
+    <span class="pill">Prevención de riesgos</span><span class="pill">Igualdad y equidad</span><span class="pill">Regulación ética</span><span class="pill">Buenas prácticas</span><span class="pill">Seguimiento continuo</span><span class="pill">Idoneidad</span>
+  </div>
+  <p class="key">Doce criterios para la Rama Judicial. Sirven como estándar de cuidado para cualquiera que firme.</p>
+</section>
+
+<!-- 16 -->
+<section class="slide">
+  <div class="label">/05 Ética, diligencia y responsabilidad</div>
+  <h2>Tres lugares, el mismo deber de leer.</h2>
+  <div class="cols c3">
+    <div class="card"><div class="tag">El abogado · Ley 1123 de 2007</div><h3>Celosa diligencia</h3><ul><li>Deber: <q>Atender con celosa diligencia sus encargos profesionales</q> (art. 28.10).</li><li>Falta: <q>citas inexactas, inexistentes o descontextualizadas</q> que puedan desviar el criterio de quien decide (art. 33.10).</li></ul></div>
+    <div class="card"><div class="tag">El servidor · Ley 1952 de 2019</div><h3>Cuidado exigible</h3><ul><li>Culpa gravísima: <q>ignorancia supina, desatención elemental o violación manifiesta de reglas de obligatorio cumplimiento</q>.</li><li>Culpa grave: inobservancia del <q>cuidado necesario que cualquier persona del común imprime a sus actuaciones</q> (art. 29).</li></ul></div>
+    <div class="card"><div class="tag">El juez · T-323 de 2024</div><h3>Verificación y motivación</h3><ul><li>Decir con claridad si se usó la herramienta, para qué y en qué parte.</li><li>Escrutar las fuentes. El razonamiento y la responsabilidad no se sustituyen.</li></ul></div>
+  </div>
+  <p class="key">La cita inexistente está descrita en la ley desde 2007. No hizo falta nombrar la inteligencia artificial.</p>
+</section>
+
+<!-- 17 -->
+<section class="slide">
+  <div class="label">/05 El caso difícil · Para la sala</div>
+  <h2>Hércules frente a la cita que no existe.</h2>
+  <div class="case"><div class="tag">Caso hipotético</div><p>Una profesional de apoyo proyecta un fallo disciplinario con ayuda de IA. Quien decide lee las conclusiones y firma. Una de las sentencias que sostiene la motivación no existe. La acción prescribía en una semana.</p></div>
+  <div class="cols c4" style="margin-top:14px">
+    <div class="card"><div class="tag">Culpabilidad</div><h3>¿Dolo, culpa gravísima o culpa grave?</h3></div>
+    <div class="card"><div class="tag">Cuidado</div><h3>¿Qué haría una persona del común antes de firmar una cita que no leyó?</h3></div>
+    <div class="card"><div class="tag">Ilicitud</div><h3>¿Se afectó sustancialmente el deber funcional?</h3></div>
+    <div class="card"><div class="tag">Autoría</div><h3>¿Responde quien proyectó, quien firmó o ambos?</h3></div>
+  </div>
+  <p class="key">Ninguna de las cuatro se contesta con una búsqueda.</p>
+</section>
+
+<!-- 18 -->
+<section class="slide">
+  <div class="label">/05 El riesgo</div>
+  <h2>El problema empieza<br>cuando se invierte el orden.</h2>
+  <div class="cols c2" style="max-width:1340px">
+    <div class="card"><div class="tag">La IA como andamio</div><h3>El operador construye</h3><p>Escribe su hipótesis, consulta la herramienta, verifica en la fuente, decide y firma lo que puede sostener.</p></div>
+    <div class="card"><div class="tag">La IA como edificio</div><h3>El operador corrige estilo</h3><p>La herramienta ordena los hechos, escoge las razones y trae las citas. La persona ajusta la redacción y firma.</p></div>
+  </div>
+  <p class="key">La firma convierte un borrador en decisión. También lo convierte en responsabilidad.</p>
+</section>
+
+<!-- 19 -->
+<section class="slide dim sec">
+  <div class="bg half" style="background-image:url(assets/deck/libros-derecho.jpg)"></div>
+  <div class="num">D</div>
+  <div class="tag">La respuesta</div>
+  <h2>Diligencia que se puede demostrar.</h2>
+  <p>Lo que un despacho puede empezar a hacer el lunes.</p>
+</section>
+
+<!-- 20 -->
+<section class="slide">
+  <div class="label">/06 Seis controles</div>
+  <h2>Antes, durante y después del prompt.</h2>
+  <div class="cols c3">
+    <div class="card"><div class="tag">01 Antes</div><h3>Hipótesis propia</h3><p>Un párrafo con su posición y el principal vacío. Después se abre la herramienta.</p></div>
+    <div class="card"><div class="tag">02 Antes</div><h3>Anonimizar</h3><p>Sin nombres, documentos, radicados ni información con reserva.</p></div>
+    <div class="card"><div class="tag">03 Durante</div><h3>Marcar la decisión</h3><p>La instrucción exige señalar [DECISIÓN DEL OPERADOR DISCIPLINARIO] y no resolverla.</p></div>
+    <div class="card"><div class="tag">04 Después</div><h3>Verificar en la fuente</h3><p>Cada norma y cada providencia se abre y se lee en el sitio oficial.</p></div>
+    <div class="card"><div class="tag">05 Después</div><h3>Declarar el uso</h3><p>Qué herramienta, para qué tarea y en qué parte del documento.</p></div>
+    <div class="card"><div class="tag">06 Siempre</div><h3>Dejar constancia</h3><p>Bitácora de lo consultado, lo verificado y lo descartado.</p></div>
+  </div>
+</section>
+
+<!-- 21 -->
+<section class="slide">
+  <div class="label">/06 Antes de firmar</div>
+  <h2>Cuatro preguntas que la herramienta<br>no responde por usted.</h2>
+  <div class="cols c4">
+    <div class="card"><div class="tag">01</div><h3>¿Leí cada providencia que cito?</h3></div>
+    <div class="card"><div class="tag">02</div><h3>¿Sostengo la motivación sin el borrador al frente?</h3></div>
+    <div class="card"><div class="tag">03</div><h3>¿Quedó algún dato reservado en la herramienta?</h3></div>
+    <div class="card"><div class="tag">04</div><h3>¿Puedo explicar para qué usé la IA y qué comprobé?</h3></div>
+  </div>
+  <p class="key">Una sola respuesta negativa y el documento todavía no está para firma.</p>
+</section>
+
+<!-- 22 -->
+<section class="slide">
+  <div class="label">/07 Del criterio al prompt</div>
+  <h2>Un buen prompt ya contiene<br>un estándar de cuidado.</h2>
+  <div class="cols c3">
+    <div class="card"><div class="tag">Rol</div><h3>Quién responde</h3><p>Eres un profesional de apoyo de un despacho disciplinario que estructura proyectos y deja las valoraciones al operador.</p></div>
+    <div class="card"><div class="tag">Contexto</div><h3>Qué caso</h3><p>El expediente está en juzgamiento, los datos están anonimizados y el término de prescripción vence en cuatro meses.</p></div>
+    <div class="card"><div class="tag">Instrucción</div><h3>Qué entrega y qué no</h3><p>Dos alternativas de calificación marcadas como decisión del operador. No confirmes que una cita existe.</p></div>
+  </div>
+  <div class="links" id="links"><a class="main" id="lab-link" href="#" hidden>Abrir el laboratorio de prompts</a><a href="taller-prompts.html">Abrir el taller: 24 prompts</a></div>
+</section>
+
+<!-- 23 -->
+<section class="slide">
+  <div class="bg strong" style="background-image:url(assets/deck/escalera.jpg);background-position:right center"></div>
+  <div class="label">Cierre</div>
+  <h1>El operador del futuro<br>se parece más a Hércules.</h1>
+  <p class="body">La herramienta puede devolverle tiempo. El criterio para usarlo no viene incluido.</p>
+  <p class="key">Entre el prompt y la sanción hay una persona que lee antes de firmar.</p>
+</section>
+
+<!-- 24 -->
+<section class="slide">
+  <div class="label">Fuentes y créditos</div>
+  <div class="credits">
+    <p>Constitución Política de Colombia, arts. 6 y 29. Ley 1952 de 2019, modificada por la Ley 2094 de 2021. Ley 1123 de 2007.</p>
+    <p>Corte Constitucional, sentencia T-323 de 2024.</p>
+    <p>Corte Suprema de Justicia, Sala de Casación Civil, STC17832-2025 y AC739-2026.</p>
+    <p>Comisión Nacional de Disciplina Judicial, rad. 150011102000202000358 02, 26 de marzo de 2026.</p>
+    <p>Magesh et al., «Hallucination-Free?», arXiv 2405.20362. Mata v. Avianca, S.D.N.Y., 2023.</p>
+    <p>R. Dworkin, El imperio de la justicia. H. L. A. Hart, El concepto de derecho. J. Rawls, Teoría de la justicia. J. Barrat, Our Final Invention.</p>
+    <p>Imágenes de Wikimedia Commons y bancos abiertos.</p>
+    <p>Portada: Daniel Gran, Prunksaal, Biblioteca Nacional de Austria, CC BY 2.5.</p>
+    <p>Ratón: Ahunt, Mus musculus, CC0.</p>
+    <p>Hércules Farnesio, Museo Arqueológico Nacional de Nápoles, CC BY 2.5.</p>
+    <p>Ronald Dworkin: David Shankbone, CC BY-SA 3.0.</p>
+    <p>Justicia: iMahesh, Maison du Renard, Bruselas, CC BY-SA 4.0.</p>
+    <p>Escritura a mano: Free-Photos, CC0.</p>
+    <p>Libros de derecho: Tony Webster, CC BY 2.0.</p>
+    <p>Escalera de los Museos Vaticanos: Wilfredor, CC0.</p>
+  </div>
+</section>
+
+</main>
+<script>
+// Cuando el laboratorio dinamico este publicado, pon aqui su direccion.
+const LAB_URL = "";
+(function () {
+  const stage = document.getElementById("stage");
+  const slides = [...document.querySelectorAll(".slide")];
+  const bar = document.getElementById("progress"), counter = document.getElementById("counter");
+  if (LAB_URL) { const a = document.getElementById("lab-link"); a.href = LAB_URL; a.hidden = false; }
+  let i = 0;
+  function ir(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    bar.style.width = ((i + 1) / slides.length) * 100 + "%";
+    counter.textContent = `${i + 1} / ${slides.length}`;
+    history.replaceState(null, "", "#" + (i + 1));
+  }
+  function escalar() { stage.style.transform = `translate(-50%,-50%) scale(${Math.min(innerWidth / 1600, innerHeight / 900)})`; }
+  addEventListener("resize", escalar);
+  addEventListener("keydown", (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (["ArrowRight", "ArrowDown", "PageDown", " ", "Enter"].includes(e.key)) { if (e.target.closest("a")) return; e.preventDefault(); ir(i + 1); }
+    else if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(e.key)) { e.preventDefault(); ir(i - 1); }
+    else if (e.key === "Home") ir(0);
+    else if (e.key === "End") ir(slides.length - 1);
+    else if (e.key.toLowerCase() === "f") { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+  });
+  let x0 = null, deslizo = false;
+  addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; deslizo = false; }, { passive: true });
+  addEventListener("touchend", (e) => { if (x0 === null) return; const d = e.changedTouches[0].clientX - x0; if (Math.abs(d) > 40) { deslizo = true; ir(i + (d < 0 ? 1 : -1)); } x0 = null; }, { passive: true });
+  addEventListener("click", (e) => { if (deslizo || e.target.closest("a") || String(getSelection())) return; ir(i + (e.clientX < innerWidth / 3 ? -1 : 1)); });
+  addEventListener("hashchange", () => ir((parseInt(location.hash.slice(1), 10) || 1) - 1));
+  escalar();
+  ir((parseInt(location.hash.slice(1), 10) || 1) - 1);
+})();
+</script>
+</body>
+</html>
