@@ -76,13 +76,17 @@
     if (!r.ok) throw new Error(j.error || "Error");
     return j;
   }
+  let registroActivo = false;
+  fetch("/api/cuenta", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ accion: "estado" }) })
+    .then((r) => r.json()).then((j) => { registroActivo = !!j.activo; pintarCuenta(); }).catch(() => { /* sin red: el registro queda oculto */ });
   function pintarCuenta() {
     const dentro = !!token;
+    $("#btn-cuenta").hidden = !registroActivo;
     $("#btn-cuenta").textContent = dentro ? "Hola, " + (nombreCuenta.split(" ")[0] || "tú") : "Guardar mis prompts";
     $("#cu-fuera").hidden = dentro; $("#cu-dentro").hidden = !dentro;
     $("#cu-titulo").textContent = dentro ? "Tu registro" : "Guarda tus prompts";
     $("#cu-hola").textContent = dentro ? `Sesión abierta como ${nombreCuenta}.` : "";
-    const rb = $("#btn-registro"); if (rb) rb.hidden = dentro || !mi.items.length;
+    const rb = $("#btn-registro"); if (rb) rb.hidden = !registroActivo || dentro || !mi.items.length;
   }
   let modoCuenta = "nuevo";
   function modo(m) {
@@ -386,7 +390,7 @@
     generando = false; estadoCrear();
     $("#cr-pedido").value = "";
     if (res.fallos.length) { $("#crear").hidden = false; mostrarFallos(res); }
-    else if (!token) toast("Guarda tus prompts para volver a consultarlos");
+    else if (registroActivo && !token) toast("Guarda tus prompts para volver a consultarlos");
     pintarCuenta();
   };
 

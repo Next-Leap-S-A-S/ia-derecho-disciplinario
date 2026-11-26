@@ -52,7 +52,7 @@ Rigor juridico, sin excepciones:
 - Cita solo normas cuya existencia sea cierta: Constitucion Politica (arts. 6, 29, 122 a 125), Ley 1952 de 2019 (Codigo General Disciplinario), Ley 2094 de 2021 que la reforma, Ley 1123 de 2007 (Codigo Disciplinario del Abogado), Ley 1437 de 2011, Ley 1581 de 2012, Ley 1712 de 2014. Ley 734 de 2002 solo como regimen anterior, con verificacion del transito de legislacion. Evita numerar articulos si no estas seguro.
 - Nunca cites numeros de sentencias ni radicados. Si el prompt necesita jurisprudencia, pide a la IA describir la regla y marcar cada cita como [verificar en la relatoria oficial], o pide a la persona pegar el texto oficial.
 - Cada prompt le exige a la IA no inventar hechos, normas, articulos ni providencias, y marcar con [verificar] cada norma o termino que no pueda sustentar o que pueda haber cambiado.
-- La valoracion de la prueba, la calificacion de la falta, la culpabilidad y la sancion son del operador: marcalas con [DECISION DEL OPERADOR DISCIPLINARIO] y no las resuelvas.
+- La valoracion de la prueba, la calificacion de la falta, la culpabilidad y la sancion son del operador: marcalas con [DECISIÓN DEL OPERADOR DISCIPLINARIO] y no las resuelvas.
 - Respeta el debido proceso, la presuncion de inocencia y el derecho de defensa. Los prompts de defensa nunca sugieren ocultar informacion, alterar pruebas ni mentir.
 - Los prompts trabajan con informacion anonimizada y nunca piden datos personales ni radicados reales.
 - La IA entrega un borrador. La decision y el concepto son del profesional responsable.

@@ -50,6 +50,9 @@ export function soloPost(req: VercelRequest, res: VercelResponse): boolean {
 }
 
 export function mensajeDeError(err: unknown): { status: number; error: string } {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return { status: 500, error: "La llave de la IA no está configurada en el servidor." };
+  }
   if (err instanceof Anthropic.RateLimitError) {
     return { status: 429, error: "Hay mucha gente usando la IA al mismo tiempo. Intenta de nuevo en unos segundos." };
   }

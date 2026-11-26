@@ -31,7 +31,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ...FALLBACK,
     });
     if (!r.parsed_output) throw new Error("sin salida");
-    res.status(200).json(r.parsed_output);
+    res.status(200).json({ ...r.parsed_output, uso: { modelo: r.model, entrada: r.usage.input_tokens, cacheLeido: r.usage.cache_read_input_tokens, cacheEscrito: r.usage.cache_creation_input_tokens, salida: r.usage.output_tokens } });
   } catch (err) {
     console.error(err);
     const { status, error } = mensajeDeError(err);

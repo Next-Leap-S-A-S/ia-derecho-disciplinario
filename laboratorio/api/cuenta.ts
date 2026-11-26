@@ -15,6 +15,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!soloPost(req, res)) return;
   const b = (req.body || {}) as Record<string, unknown>;
   const accion = String(b.accion || "");
+  // La pagina pregunta si hay base de datos para mostrar o esconder el registro.
+  if (accion === "estado") return void res.status(200).json({ activo: !!(process.env.DATABASE_URL && process.env.SIGNING_SECRET) });
   try {
     await asegurarTabla();
 

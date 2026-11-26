@@ -360,7 +360,7 @@ h2{font-size:58px;font-weight:500;line-height:1.08;letter-spacing:-.028em;max-wi
     <div class="card"><div class="tag">Contexto</div><h3>Qué caso</h3><p>El expediente está en juzgamiento, los datos están anonimizados y el término de prescripción vence en cuatro meses.</p></div>
     <div class="card"><div class="tag">Instrucción</div><h3>Qué entrega y qué no</h3><p>Dos alternativas de calificación marcadas como decisión del operador. No confirmes que una cita existe.</p></div>
   </div>
-  <div class="links" id="links"><a class="main" id="lab-link" href="#" hidden>Abrir el laboratorio de prompts</a><a href="taller-prompts.html">Abrir el taller: 24 prompts</a></div>
+  <div class="links" id="links"><a class="main" id="lab-link" href="#" target="_blank" rel="noopener" hidden>Abrir el laboratorio · código TUNJA26</a><a href="taller-prompts.html">Abrir el taller: 24 prompts</a></div>
 </section>
 
 <!-- 24 -->
@@ -396,8 +396,8 @@ h2{font-size:58px;font-weight:500;line-height:1.08;letter-spacing:-.028em;max-wi
 
 </main>
 <script>
-// Cuando el laboratorio dinamico este publicado, pon aqui su direccion.
-const LAB_URL = "";
+// Direccion del laboratorio dinamico. Si queda vacia, el boton no aparece.
+const LAB_URL = "https://laboratorio-disciplinario.vercel.app/";
 (function () {
   const stage = document.getElementById("stage");
   const slides = [...document.querySelectorAll(".slide")];
